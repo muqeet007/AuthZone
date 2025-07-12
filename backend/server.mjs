@@ -6,6 +6,7 @@ import authRouter from './routes/Auth.route.mjs'
 
 const app=express()
 app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 app.use('/api/user',userRouter)
 app.use('/api/auth',authRouter)
 

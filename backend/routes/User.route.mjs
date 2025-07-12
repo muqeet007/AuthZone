@@ -69,16 +69,26 @@ router.post('/login',async (req,res)=>
             
             else
             {
+                // Creating jet token
                 const token=jwt.sign(
                 {
                     userid:user._id,
                     useremail:user.email
                 },
                 SECRET_KEY,
-                {expiresIn:'2h'}
-            )
+                {expiresIn:'2h'})
 
-            return res.json({token})
+                res.cookie('token',token,
+                    {
+                        httpOnly: true,        // Cannot be accessed from JavaScript
+                        secure: false,          // Only sent over HTTPS (use false for localhost)
+                        sameSite: "Strict",    // CSRF protection
+                        maxAge: 2 * 60 * 60 * 1000, // 2 hours
+                    }
+                )
+            
+
+            res.status(200).json({ message: "Login successful" });
             }
         }
 
