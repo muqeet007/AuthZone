@@ -1,17 +1,16 @@
-import express from 'express'
+import express from 'express';
+import { protect } from '../middleware/protect.js'; // adjust the path as needed
 
-const router=express.Router()
+const router = express.Router();
 
-router.get('/dashboard',(req,res)=>
-{
-    res.send("Auth router works")
-    
-})
+// ✅ Protected Route
+router.get('/dashboard', protect, (req, res) => {
+  res.send(`Welcome to your dashboard, ${req.user.useremail}`);
+});
 
-router.get('/profile',(req,res)=>
-{
-    res.send("Auth router works")
-    
-})
+// ✅ Another Protected Route
+router.get('/profile', protect, (req, res) => {
+  res.send(`This is the profile for user ID: ${req.user.userid}`);
+});
 
-export default router
+export default router;
