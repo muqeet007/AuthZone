@@ -1,5 +1,5 @@
 import express from 'express';
-import { protect } from '../middleware/protect.js'; // adjust the path as needed
+import { protect } from '../middleware/protect.mjs'; // adjust the path as needed
 
 const router = express.Router();
 

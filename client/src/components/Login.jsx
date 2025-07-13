@@ -1,8 +1,47 @@
 import React, { useState } from 'react'
-
+import axios from '../axios'
+import { useNavigate } from 'react-router-dom'
 function Login() {
   const [activeTab, setActiveTab] = useState('login')
+  const [name,setName]=useState("")
+  const [password,setPassword]=useState("")
+  const [email,setEmail]=useState("")
+  const [error,setError]=useState("")
+  const navigate=useNavigate()
 
+
+  const axiosRegisterPost=async()=>
+  {
+    try{
+        const response=await axios.post('/api/user/register',{name,email,password})
+        navigate('/')
+    }
+    catch(error)
+    {
+        setError(error.response?.data?.message||"Registration Failed.")
+    }
+  }
+  const axiosLoginPost=async()=>
+  {
+    try{
+        const response=await axios.post('/api/user/login',{email,password})
+        navigate('/dashboard')
+    }
+    catch(error)
+    {
+        setError(error.response?.data?.message||"Login Failed.")
+    }
+  }
+
+ const handleRegistration = (e) => {
+  e.preventDefault();
+  axiosRegisterPost(); 
+}
+  const handleLogin=(e)=>
+  {
+        e.preventDefault();
+        axiosLoginPost()
+  }
   return (
     <div className="h-full min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-100">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -15,7 +54,7 @@ function Login() {
           {/* Tabs */}
           <div className="flex border-b border-gray-200">
             <button
-              onClick={() => setActiveTab('login')}
+              onClick={() => {setError("") ; setActiveTab('login')}}
               className={`py-4 px-1 border-b-2 font-medium text-sm flex-1 text-center ${
                 activeTab === 'login'
                   ? 'border-black text-black'
@@ -25,7 +64,7 @@ function Login() {
               Sign in
             </button>
             <button
-              onClick={() => setActiveTab('register')}
+              onClick={() => {setError("") ; setActiveTab('register')}}
               className={`py-4 px-1 border-b-2 font-medium text-sm flex-1 text-center ${
                 activeTab === 'register'
                   ? 'border-black text-black'
@@ -39,7 +78,8 @@ function Login() {
           {/* Login Form */}
           {activeTab === 'login' && (
             <div className="space-y-6 pt-6">
-              <form className="space-y-6" action="#" method="POST">
+              <form className="space-y-6" onSubmit={handleLogin}>
+                {error && <p className="text-red-500">{error}</p>}
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                     Email address
@@ -49,6 +89,7 @@ function Login() {
                     name="email"
                     type="email"
                     required
+                    onChange={(e)=>setEmail(e.target.value)}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-black focus:border-black sm:text-sm"
                   />
                 </div>
@@ -62,6 +103,7 @@ function Login() {
                     name="password"
                     type="password"
                     required
+                    onChange={(e)=>setPassword(e.target.value)}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-black focus:border-black sm:text-sm"
                   />
                 </div>
@@ -99,7 +141,8 @@ function Login() {
           {/* Register Form */}
           {activeTab === 'register' && (
             <div className="space-y-6 pt-6">
-              <form className="space-y-6" action="#" method="POST">
+              <form className="space-y-6" onSubmit={handleRegistration}>
+                {error && <p className="text-red-500">{error}</p>}
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                     Full name
@@ -109,6 +152,7 @@ function Login() {
                     name="name"
                     type="text"
                     required
+                    onChange={(e)=>setName(e.target.value)}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-black focus:border-black sm:text-sm"
                   />
                 </div>
@@ -122,6 +166,7 @@ function Login() {
                     name="email"
                     type="email"
                     required
+                    onChange={(e)=>setEmail(e.target.value)}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-black focus:border-black sm:text-sm"
                   />
                 </div>
@@ -135,6 +180,7 @@ function Login() {
                     name="password"
                     type="password"
                     required
+                    onChange={(e)=>setPassword(e.target.value)}
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-black focus:border-black sm:text-sm"
                   />
                 </div>

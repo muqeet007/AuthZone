@@ -4,8 +4,14 @@ import cookieParser from 'cookie-parser'
 import userRouter from './routes/User.route.mjs'
 import authRouter from './routes/Auth.route.mjs'
 import { connectDatabase } from './config/config.mjs'
+import cors from 'cors';
+
 
 const app=express()
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
