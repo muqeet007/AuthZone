@@ -2,6 +2,7 @@ import User from '../models/User.model.mjs'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { SECRET_KEY } from '../config/config.mjs'
+import { validationResult } from 'express-validator'
 
 export const Me=async (req,res)=>
 {
@@ -27,6 +28,15 @@ export const Register=async(req,res)=>
 
     const {name,email,password}=req.body
 
+    const errors=validationResult(req)
+
+    if(!errors.isEmpty())
+    {
+        return res.status(400).json({
+            message: "Validation failed",
+            errors: errors.mapped()
+})
+    }
     try
     {
         // Trying to see whether the user with the same email already exists , as email is unique
@@ -65,6 +75,18 @@ export const Login=async (req,res)=>
 {
     //Grabbing the credentials entered by the user
     const {email,password}=req.body
+
+    
+    
+    const errors=validationResult(req)
+
+    if(!errors.isEmpty())
+    {
+        return res.status(400).json({
+        message: "Validation failed",
+        errors: errors.mapped()
+})
+    }
 
     try
     {
