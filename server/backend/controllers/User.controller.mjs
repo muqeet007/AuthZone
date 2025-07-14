@@ -15,7 +15,7 @@ export const Me=async (req,res)=>
     }
     catch(error)
     {
-        res.status(500).json({message:error.message})
+        res.json(null)
     }
     
 }
@@ -121,7 +121,10 @@ export const Login=async (req,res)=>
 
 export const Logout=(req,res)=>
 {
-    req.clearCookie('token')
-     return res.status(200).json({ message: "Logged out successfully" })
-
+    try {
+        res.clearCookie('token')
+        return res.status(200).json({ message: "Logged out successfully" })
+    } catch (error) {
+        return res.status(500).json({ message: "Logout failed", error: error.message })
+    }
 }

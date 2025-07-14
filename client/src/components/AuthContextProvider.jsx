@@ -15,7 +15,12 @@ function AuthContextProvider({children}) {
         }
         catch(error)
         {
-            setUser(null)
+          if (error.response && error.response.status === 401) {
+            setUser(null);
+          } else {
+            // Log other errors (if any) or handle as needed
+            console.error(error);
+          }
         }
   }
 

@@ -5,6 +5,7 @@ function Login() {
   const [activeTab, setActiveTab] = useState('login')
   const [name,setName]=useState("")
   const [password,setPassword]=useState("")
+  const [indicatorMessage,setIndicatorMessage]=useState("")
   const [email,setEmail]=useState("")
   const [error,setError]=useState("")
   const navigate=useNavigate()
@@ -14,6 +15,7 @@ function Login() {
   {
     try{
         const response=await axios.post('/api/user/register',{name,email,password})
+        setIndicatorMessage(response.data.message)
         navigate('/')
     }
     catch(error)
@@ -25,7 +27,9 @@ function Login() {
   {
     try{
         const response=await axios.post('/api/user/login',{email,password})
+        setIndicatorMessage(response.data.message)
         navigate('/dashboard')
+
     }
     catch(error)
     {
@@ -54,7 +58,7 @@ function Login() {
           {/* Tabs */}
           <div className="flex border-b border-gray-200">
             <button
-              onClick={() => {setError("") ; setActiveTab('login')}}
+              onClick={() => {setIndicatorMessage("");setError("") ; setActiveTab('login')}}
               className={`py-4 px-1 border-b-2 font-medium text-sm flex-1 text-center ${
                 activeTab === 'login'
                   ? 'border-black text-black'
@@ -64,7 +68,7 @@ function Login() {
               Sign in
             </button>
             <button
-              onClick={() => {setError("") ; setActiveTab('register')}}
+              onClick={() => {setIndicatorMessage("");setError("") ; setActiveTab('register')}}
               className={`py-4 px-1 border-b-2 font-medium text-sm flex-1 text-center ${
                 activeTab === 'register'
                   ? 'border-black text-black'
@@ -80,6 +84,8 @@ function Login() {
             <div className="space-y-6 pt-6">
               <form className="space-y-6" onSubmit={handleLogin}>
                 {error && <p className="text-red-500">{error}</p>}
+
+                {indicatorMessage&&<p className="text-green-500">{indicatorMessage}</p>}
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                     Email address
@@ -143,6 +149,7 @@ function Login() {
             <div className="space-y-6 pt-6">
               <form className="space-y-6" onSubmit={handleRegistration}>
                 {error && <p className="text-red-500">{error}</p>}
+                {indicatorMessage&&<p className="text-green-500">{indicatorMessage}</p>}
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                     Full name
